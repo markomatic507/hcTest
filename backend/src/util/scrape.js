@@ -1,10 +1,6 @@
-const puppeteer = require("puppeteer-extra");
+const puppeteer = require("puppeteer");
 const url = "https://www.linkedin.com/login";
 const parse = require("./parse");
-const StealthPlugin = require("puppeteer-extra-plugin-stealth");
-puppeteer.use(StealthPlugin());
-const AdblockerPlugin = require("puppeteer-extra-plugin-adblocker");
-puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
 async function scrape(req, res) {
   const link = req.body.link;
@@ -13,7 +9,8 @@ async function scrape(req, res) {
 
   try {
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
+      args: ["--no-sandbox", "--disable-gpu"],
     });
     const page = await browser.newPage();
     await page.setUserAgent("Chrome/88.0.4298.0");

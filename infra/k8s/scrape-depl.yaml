@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrape
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrape
+  template:
+    metadata:
+      labels:
+        app: scrape
+    spec:
+      containers:
+        - name: scrape
+          image: markomatic507/scrape
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scrape-srv
+spec:
+  selector:
+    app: scrape
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: scrape
+      protocol: TCP
