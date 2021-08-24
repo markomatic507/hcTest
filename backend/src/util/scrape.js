@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer");
 const url = "https://www.linkedin.com/login";
 const parse = require("./parse");
+const Scraped = require("../models/scraped");
 
 async function scrape(req, res) {
   const link = req.body.link;
@@ -19,7 +20,45 @@ async function scrape(req, res) {
 
     let data = await parse(page);
 
-    res.status(200).send({ data: data });
+    const exist = await Scraped.findOne({ link });
+
+    const newScraped = new Scraped({
+      link: link,
+      image: data.image,
+      name: data.name,
+      desc: data.desc,
+      connections: data.connections,
+      about: data.about,
+      exp: data.exp,
+      topSkills: data.topSkills,
+    });
+
+    if (exist) {
+      await Scraped.findOneAndUpdate(
+        { link: link },
+        {
+          link: link,
+          image: data.image,
+          name: data.name,
+          desc: data.desc,
+          connections: data.connections,
+          about: data.about,
+          exp: data.exp,
+          topSkills: data.topSkills,
+        },
+        {
+          useFindAndModify: false,
+        }
+      ).catch(() => {
+        return res.status(500).send({ message: "Error" });
+      });
+
+      return res.status(200).send({ data: data });
+    }
+
+    await newScraped.save(newScraped);
+
+    return res.status(200).send({ data: data });
   } catch (err) {
     console.error(err);
     return res.status(500).send({ message: "Error" });
