@@ -50,18 +50,20 @@ async function scrape(req, res) {
           useFindAndModify: false,
         }
       ).catch(() => {
-        return res.status(500).send({ message: "Error" });
+        return res
+          .status(500)
+          .send({ message: "Error updating existing data" });
       });
 
-      return res.status(200).send({ data: data });
+      return res.status(200).send({ scraped: data });
     }
 
     await newScraped.save(newScraped);
 
-    return res.status(200).send({ data: data });
+    return res.status(200).send({ scraped: data });
   } catch (err) {
     console.error(err);
-    return res.status(500).send({ message: "Error" });
+    return res.status(500).send({ message: "Error scraping data" });
   }
 }
 

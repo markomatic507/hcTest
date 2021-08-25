@@ -12,7 +12,7 @@ router.get("/api/scrape", (req, res) => {
 
   Scraped.find(condition)
     .then((data) => {
-      res.send({ data: data });
+      res.send({ scraped: data });
     })
     .catch((err) => {
       return res.status(500).send({ message: "Error" });
