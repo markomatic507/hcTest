@@ -3,12 +3,19 @@ const url = "https://www.linkedin.com/login";
 const parse = require("./parse");
 const Scraped = require("../models/scraped");
 
+/**
+ * Function that scrapes the LinkedIn page and send response with that data
+ * @param req
+ * @param res
+ * @returns Sends the respone with appropriate code and data
+ */
 async function scrape(req, res) {
   const link = req.body.link;
   const username = req.body.username;
   const password = req.body.password;
 
   try {
+    // Launch browser and sets user agent
     const browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-gpu"],
@@ -67,22 +74,28 @@ async function scrape(req, res) {
   }
 }
 
+/**
+ * Function that navigates in the browser
+ * @param page
+ * @param {String} link
+ * @param {String} username
+ * @param {String} password
+ */
 async function navigation(page, link, username, password) {
   await page.goto(url);
-  await page.waitForTimeout(1000);
+
   await page.click("#username");
-  await page.waitForTimeout(500);
   await page.keyboard.type(username);
-  await page.waitForTimeout(1000);
+
   await page.click("#password");
-  await page.waitForTimeout(500);
   await page.keyboard.type(password);
-  await page.waitForTimeout(1000);
+
   await page.click(".from__button--floating");
   await page.waitForNavigation();
-  await page.waitForTimeout(1000);
+
   await page.goto(link);
 
+  // Scrolls to the end of page
   await page.evaluate(
     () =>
       new Promise((resolve) => {

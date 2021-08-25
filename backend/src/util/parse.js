@@ -1,68 +1,54 @@
+/**
+ * Function that takes the html page and parses data
+ * @param page
+ * @returns Parsed data
+ */
 async function parse(page) {
   let data = {};
 
-  data.image = await page.evaluate(() => {
-    let imageSrc = document.body.querySelector(
-      ".pv-top-card-profile-picture__image.pv-top-card-profile-picture__image--show.ember-view"
+  await extractImage(data, page);
+
+  await extractName(data, page);
+
+  await extractDesc(data, page);
+
+  await extractConnections(data, page);
+
+  await extractAbout(data, page);
+
+  await extractExp(data, page);
+
+  await extractTopSkills(data, page);
+
+  //console.log(data);
+
+  return data;
+}
+
+module.exports = parse;
+
+async function extractTopSkills(data, page) {
+  data.topSkills = await page.evaluate(() => {
+    let skillList = document.body.querySelectorAll(
+      ".pv-skill-categories-section__top-skills.pv-profile-section__section-info.section-info.pb1>li"
     );
 
-    if (imageSrc === null) {
-      imageSrc = document.body.querySelector(
-        ".profile-photo-edit__preview.ember-view"
-      );
-    }
-
-    if (imageSrc !== null) {
-      return imageSrc.src;
+    if (skillList !== null) {
+      return Object.values(skillList).map((x) => {
+        let skill = x.querySelector(
+          "p.pv-skill-category-entity__name.tooltip-container>a>span"
+        );
+        return {
+          skill: skill !== null ? skill.innerText : null,
+        };
+      });
     } else {
       return null;
     }
   });
+}
 
-  data.name = await page.evaluate(() => {
-    let nameText = document.body.querySelector(".t-24");
-
-    if (nameText !== null) {
-      return nameText.innerText;
-    } else {
-      return null;
-    }
-  });
-
-  data.desc = await page.evaluate(() => {
-    let descText = document.body.querySelector(".text-body-medium");
-
-    if (descText !== null) {
-      return descText.innerText;
-    } else {
-      return null;
-    }
-  });
-
-  data.connections = await page.evaluate(() => {
-    let connectionsText = document.body.querySelector(".pv-top-card--list");
-
-    if (connectionsText !== null) {
-      return connectionsText.innerText;
-    } else {
-      return null;
-    }
-  });
-
-  data.about = await page.evaluate(() => {
-    let aboutText = document.body.querySelector(
-      "div.inline-show-more-text.inline-show-more-text--is-collapsed.mt4.t-14"
-    );
-
-    if (aboutText !== null) {
-      aboutText = aboutText.innerText;
-      aboutText = aboutText.replace(/\n/g, "");
-      return aboutText.replace(/…see more/g, "");
-    } else {
-      return null;
-    }
-  });
-
+async function extractExp(data, page) {
   data.exp = await page.evaluate(() => {
     let jobs = document.body.querySelectorAll(
       ".pv-profile-section__card-item-v2.pv-profile-section.pv-position-entity.ember-view"
@@ -89,29 +75,76 @@ async function parse(page) {
       return null;
     }
   });
+}
 
-  data.topSkills = await page.evaluate(() => {
-    let skillList = document.body.querySelectorAll(
-      ".pv-skill-categories-section__top-skills.pv-profile-section__section-info.section-info.pb1>li"
+async function extractAbout(data, page) {
+  data.about = await page.evaluate(() => {
+    let aboutText = document.body.querySelector(
+      "div.inline-show-more-text.inline-show-more-text--is-collapsed.mt4.t-14"
     );
 
-    if (skillList !== null) {
-      return Object.values(skillList).map((x) => {
-        let skill = x.querySelector(
-          "p.pv-skill-category-entity__name.tooltip-container>a>span"
-        );
-        return {
-          skill: skill !== null ? skill.innerText : null,
-        };
-      });
+    if (aboutText !== null) {
+      aboutText = aboutText.innerText;
+      aboutText = aboutText.replace(/\n/g, "");
+      return aboutText.replace(/…see more/g, "");
     } else {
       return null;
     }
   });
-
-  console.log(data);
-
-  return data;
 }
 
-module.exports = parse;
+async function extractConnections(data, page) {
+  data.connections = await page.evaluate(() => {
+    let connectionsText = document.body.querySelector(".pv-top-card--list");
+
+    if (connectionsText !== null) {
+      return connectionsText.innerText;
+    } else {
+      return null;
+    }
+  });
+}
+
+async function extractDesc(data, page) {
+  data.desc = await page.evaluate(() => {
+    let descText = document.body.querySelector(".text-body-medium");
+
+    if (descText !== null) {
+      return descText.innerText;
+    } else {
+      return null;
+    }
+  });
+}
+
+async function extractName(data, page) {
+  data.name = await page.evaluate(() => {
+    let nameText = document.body.querySelector(".t-24");
+
+    if (nameText !== null) {
+      return nameText.innerText;
+    } else {
+      return null;
+    }
+  });
+}
+
+async function extractImage(data, page) {
+  data.image = await page.evaluate(() => {
+    let imageSrc = document.body.querySelector(
+      ".pv-top-card-profile-picture__image.pv-top-card-profile-picture__image--show.ember-view"
+    );
+
+    if (imageSrc === null) {
+      imageSrc = document.body.querySelector(
+        ".profile-photo-edit__preview.ember-view"
+      );
+    }
+
+    if (imageSrc !== null) {
+      return imageSrc.src;
+    } else {
+      return null;
+    }
+  });
+}
