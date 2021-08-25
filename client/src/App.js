@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route, Link } from "react-router-dom";
+import Scrape from "./components/Scrape";
+import Scraped from "./components/Scraped";
 
 function App() {
   return (
@@ -21,6 +23,13 @@ function App() {
           </li>
         </div>
       </nav>
+
+      <div className='container mt-3'>
+        <Switch>
+          <Route exact path={["/", "/scrape"]} component={Scrape} />
+          <Route exact path={"/scraped"} component={Scraped} />
+        </Switch>
+      </div>
     </div>
   );
 }
