@@ -16,16 +16,20 @@ Steps for running this project locally.
 ### Installation
 
 1. Clone repository
-2. Go in backend folder and build image with Docker
+2. Start minikube
+```docker
+minikube start
+```
+4. Go in backend folder and build image with Docker
 ```docker
 docker build -t markomatic507/scrape .
 ```
-3. Go in client folder and build image with Docker
+4. Go in client folder and build image with Docker
 ```docker
 docker build -t markomatic507/client .
 ```
-4. Add entry in /etc/hosts file. Add public IP of your cluster with address scrape.com
-5. Run Skaffold
+5. Add entry in /etc/hosts file. Add public IP of your cluster with address scrape.com
+6. Run Skaffold
 ```skaffold
 skaffold dev
 ```
