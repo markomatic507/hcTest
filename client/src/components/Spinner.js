@@ -1,5 +1,9 @@
 import React from "react";
 
+/**
+ * Function that displays the spinner
+ * @returns spinner html
+ */
 const Spinner = () => {
   return (
     <div className='mt-5 d-flex justify-content-center'>

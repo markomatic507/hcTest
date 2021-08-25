@@ -3,6 +3,10 @@ import scrapeService from "../services/scrapeService";
 import DataCard from "./DataCard";
 import Spinner from "./Spinner";
 
+/**
+ * Component that displays scrape page and allows access to scrape functionality
+ * @returns html for scrape display
+ */
 const Scrape = () => {
   const initialScrapeState = {
     link: "",

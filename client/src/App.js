@@ -5,6 +5,7 @@ import Scraped from "./components/Scraped";
 
 function App() {
   return (
+    // Navbar
     <div>
       <nav className='navbar navbar-expand navbar-dark bg-dark'>
         <a href='/' className='navbar-brand'>
@@ -24,6 +25,7 @@ function App() {
         </div>
       </nav>
 
+      {/* Routes */}
       <div className='container mt-3'>
         <Switch>
           <Route exact path={["/", "/scrape"]} component={Scrape} />

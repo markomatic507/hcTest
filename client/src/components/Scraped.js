@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import scrapeService from "../services/scrapeService";
 import DataCard from "./DataCard";
 
+/**
+ * Component that displays scraped data retrived from api
+ * @returns html for scraped display
+ */
 const Scraped = () => {
   const [scraped, setScraped] = useState();
   const [search, setSearch] = useState("");

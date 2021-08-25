@@ -1,5 +1,10 @@
 import React from "react";
 
+/**
+ * Component that takes scraped data and displayes it
+ * @param param0 Data retrived from api that containes scraped data for one user
+ * @returns Scraped data styled in card
+ */
 const DataCard = ({ scrapeData }) => {
   return (
     <div className='card w-100 mt-5'>
