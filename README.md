@@ -37,7 +37,7 @@ Go to scrape.com page. Scrape page allows scraping of LikedIn profiles and scrap
 # Roadmap
 
 - [ ] Better error handling for front-end and back-end
-- [ ] Improved front-end design
+- [ ] Improve front-end design
 - [ ] Split backend in microservices
 - [ ] Add back-end validation
 - [ ] Add front-end regex validation for checking if the links are valid
